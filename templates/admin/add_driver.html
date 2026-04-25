@@ -1,0 +1,43 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-card large">
+        <h1>Add Driver</h1>
+        <p>Create a new driver account.</p>
+
+        <form action="/admin_add_driver" method="POST">
+            <label>Full Name</label>
+            <input type="text" name="full_name" required>
+
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Password</label>
+            <input type="text" name="password" required>
+
+            <label>Phone</label>
+            <input type="text" name="phone" required>
+
+            <label>Vehicle Type</label>
+            <input type="text" name="vehicle_type" placeholder="Motorcycle / Car" required>
+
+            <div class="grid-2">
+                <div>
+                    <label>Latitude</label>
+                    <input type="number" step="0.000001" name="current_x" required>
+                </div>
+
+                <div>
+                    <label>Longitude</label>
+                    <input type="number" step="0.000001" name="current_y" required>
+                </div>
+            </div>
+
+            <button type="submit">Add Driver</button>
+        </form>
+
+        <a class="secondary-link-dark form-back" href="/admin_drivers">Back</a>
+    </div>
+</div>
+{% endblock %}

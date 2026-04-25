@@ -1,0 +1,37 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>{{ market.name }} Products</h1>
+        <p>Manage products for this market.</p>
+    </div>
+
+    <div class="page-actions">
+        <a class="pay-btn admin-small-action" href="/admin_add_product/{{ market.id }}">Add Product</a>
+        <a class="secondary-link-dark" href="/admin_markets">Back Markets</a>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image">
+                <img src="{{ product.image_url }}"
+                     alt="{{ product.name }}"
+                     onerror="this.src='/static/images/products/default.jpg'">
+            </div>
+
+            <div class="product-content">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+
+                <div class="product-footer">
+                    <span class="price">₪{{ "%.2f"|format(product.price) }}</span>
+                    <a class="danger-btn" href="/admin_delete_product/{{ product.id }}">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

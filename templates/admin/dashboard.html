@@ -1,0 +1,80 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>Admin Dashboard</h1>
+        <p>Control orders, drivers, customers, markets, and products from one place.</p>
+    </div>
+
+    <div class="admin-quick-grid">
+        <a href="/admin_orders" class="admin-tile">
+            <span>📦</span>
+            <h3>Orders</h3>
+            <p>Manage order status.</p>
+        </a>
+
+        <a href="/admin_drivers" class="admin-tile">
+            <span>🚚</span>
+            <h3>Drivers</h3>
+            <p>Add or delete drivers.</p>
+        </a>
+
+        <a href="/admin_customers" class="admin-tile">
+            <span>👥</span>
+            <h3>Customers</h3>
+            <p>View or delete customers.</p>
+        </a>
+
+        <a href="/admin_markets" class="admin-tile">
+            <span>🏪</span>
+            <h3>Markets</h3>
+            <p>Manage markets and products.</p>
+        </a>
+        <a href="/admin_support" class="admin-tile">
+            <span>💬</span>
+            <h3>Support-Tickets</h3>
+            <p>Reply and Close tickets.</p>
+        </a>
+    </div>
+
+    <div class="admin-stats">
+        <div><strong>{{ total_orders }}</strong><span>Total Orders</span></div>
+        <div><strong>{{ pending_orders }}</strong><span>Pending</span></div>
+        <div><strong>{{ delivered_orders }}</strong><span>Delivered</span></div>
+    </div>
+
+    <div class="section-title">
+        <h2>Latest Orders</h2>
+        <p>Recent activity in the system.</p>
+    </div>
+
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Driver</th>
+                <th>Pickup</th>
+                <th>Delivery</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Total</th>
+            </tr>
+
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.customer_name }}</td>
+                <td>{{ order.driver_name if order.driver_name else "Not assigned" }}</td>
+                <td>{{ order.pickup_address }}</td>
+                <td>{{ order.delivery_address }}</td>
+                <td><span class="badge">{{ order.status }}</span></td>
+                <td><span class="badge">{{ order.payment_status }}</span></td>
+                <td>₪{{ "%.2f"|format(order.total_price if order.total_price else 0) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

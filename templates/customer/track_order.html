@@ -1,0 +1,58 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>My Orders</h1>
+        <p>Track your orders, driver, payment, and delivery time.</p>
+    </div>
+
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Pickup</th>
+                <th>Delivery</th>
+                <th>Details</th>
+                <th>Driver</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Total</th>
+                <th>ETA</th>
+                <th>Picked Up</th>
+                <th>Delivered</th>
+                <th>Action</th>
+            </tr>
+
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.pickup_address }}</td>
+                <td>{{ order.delivery_address }}</td>
+                <td>{{ order.package_description }}</td>
+                <td>{{ order.driver_name if order.driver_name else "Not assigned" }}</td>
+                <td><span class="badge">{{ order.status }}</span></td>
+                <td><span class="badge">{{ order.payment_status if order.payment_status else "unpaid" }}</span></td>
+                <td>₪{{ "%.2f"|format(order.total_price if order.total_price else 0) }}</td>
+                <td>
+                    {% if order.estimated_minutes == 0 %}
+                        Completed
+                    {% else %}
+                        {{ order.estimated_minutes }} min
+                    {% endif %}
+                </td>
+                <td>{{ order.picked_up_at if order.picked_up_at else "-" }}</td>
+                <td>{{ order.delivered_at if order.delivered_at else "-" }}</td>
+                <td>
+                    {% if order.payment_status != "paid" %}
+                        <a class="small-btn" href="/pay_order/{{ order.id }}">Pay</a>
+                    {% else %}
+                        <a class="small-btn" href="/support">Support</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

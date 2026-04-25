@@ -1,0 +1,43 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>Drivers</h1>
+        <p>Add, view, and delete delivery drivers.</p>
+    </div>
+
+    <div class="page-actions">
+        <a class="pay-btn admin-small-action" href="/admin_add_driver">Add Driver</a>
+        <a class="secondary-link-dark" href="/admin">Back Dashboard</a>
+    </div>
+
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Vehicle</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            {% for driver in drivers %}
+            <tr>
+                <td>#{{ driver.id }}</td>
+                <td>{{ driver.full_name }}</td>
+                <td>{{ driver.email }}</td>
+                <td>{{ driver.phone }}</td>
+                <td>{{ driver.vehicle_type }}</td>
+                <td>{{ driver.current_x }}, {{ driver.current_y }}</td>
+                <td><span class="badge">{{ driver.status }}</span></td>
+                <td><a class="danger-btn" href="/admin_delete_driver/{{ driver.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

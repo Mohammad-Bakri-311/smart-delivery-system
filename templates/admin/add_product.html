@@ -1,0 +1,28 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-card large">
+        <h1>Add Product</h1>
+        <p>Image file must already exist inside: static/images/products/</p>
+
+        <form action="/admin_add_product/{{ market_id }}" method="POST">
+            <label>Product Name</label>
+            <input type="text" name="name" required>
+
+            <label>Description</label>
+            <textarea name="description" required></textarea>
+
+            <label>Price</label>
+            <input type="number" step="0.01" name="price" required>
+
+            <label>Image File Name</label>
+            <input type="text" name="image_file" placeholder="Chicken-Burger.jpg" required>
+
+            <button type="submit">Add Product</button>
+        </form>
+
+        <a class="secondary-link-dark form-back" href="/admin_markets">Back</a>
+    </div>
+</div>
+{% endblock %}

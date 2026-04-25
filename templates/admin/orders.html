@@ -1,0 +1,50 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>Manage Orders</h1>
+        <p>Update pickup, delivery, and cancellation status.</p>
+    </div>
+
+    <div class="page-actions">
+        <a class="secondary-link-dark" href="/admin">Back Dashboard</a>
+    </div>
+
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Driver</th>
+                <th>Pickup</th>
+                <th>Delivery</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.customer_name }}</td>
+                <td>{{ order.driver_name if order.driver_name else "Not assigned" }}</td>
+                <td>{{ order.pickup_address }}</td>
+                <td>{{ order.delivery_address }}</td>
+                <td><span class="badge">{{ order.status }}</span></td>
+                <td><span class="badge">{{ order.payment_status }}</span></td>
+                <td>₪{{ "%.2f"|format(order.total_price if order.total_price else 0) }}</td>
+                <td>
+                    <div class="admin-row-actions">
+                        <a class="small-btn" href="/admin_update_order/{{ order.id }}/picked_up">Picked</a>
+                        <a class="small-btn success" href="/admin_update_order/{{ order.id }}/delivered">Delivered</a>
+                        <a class="danger-btn" href="/admin_update_order/{{ order.id }}/cancelled">Cancel</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

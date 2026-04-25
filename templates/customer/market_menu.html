@@ -1,0 +1,53 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+
+    <div class="hero">
+        <h1>{{ market.name }}</h1>
+        <p>Choose your items and add to cart</p>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="page-actions">
+        <a class="secondary-link-dark" href="/customer">🏠 Home</a>
+        <a class="secondary-link-dark" href="/markets">⬅ Markets</a>
+        <a class="secondary-link-dark" href="/cart">🛒 Cart</a>
+    </div>
+
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+
+            <div class="product-image">
+    <img src="{{ product.image_url }}"
+         alt="{{ product.name }}"
+         onerror="this.src='/static/images/products/default.jpg'">
+</div>
+
+            <div class="product-content">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+
+                <div class="product-footer">
+                    <span class="price">₪{{ "%.2f"|format(product.price) }}</span>
+
+                    <form action="/add_to_cart" method="POST">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        {% if product.can_order %}
+                    <form action="/add_to_cart" method="POST">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="add-btn">Add</button>
+                    </form>
+                         {% else %}
+                         <span class="unavailable-badge">Not available now</span>
+                         {% endif %}
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

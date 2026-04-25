@@ -1,0 +1,23 @@
+<div class="navbar">
+    <div class="logo">Smart Delivery</div>
+
+    <div class="nav-links">
+        {% if session.get("role") == "customer" %}
+            <a href="/customer">Home</a>
+            <a href="/markets">Markets</a>
+            <a href="/cart">Cart</a>
+            <a href="/track_order">Orders</a>
+            <a href="/support">Support</a>
+            <a href="/notifications">Notifications</a>
+
+        {% elif session.get("role") == "driver" %}
+            <a href="/driver">Home</a>
+            <a href="/notifications">Notifications</a>
+
+        {% elif session.get("role") == "admin" %}
+            <a href="/admin">Home</a>
+        {% endif %}
+
+        <a class="logout" href="/logout">Logout</a>
+    </div>
+</div>

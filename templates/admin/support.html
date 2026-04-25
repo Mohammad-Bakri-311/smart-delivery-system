@@ -1,0 +1,53 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="hero">
+        <h1>Support Tickets</h1>
+        <p>Manage and reply to customer support requests.</p>
+    </div>
+
+    {% for ticket in tickets %}
+    <div class="ticket-card">
+
+        <div class="ticket-header">
+            <h3>{{ ticket.subject }}</h3>
+
+            {% if ticket.status == 'closed' %}
+                <span class="status closed">Closed</span>
+            {% else %}
+                <span class="status open">Open</span>
+            {% endif %}
+        </div>
+
+        <p><b>Customer:</b> {{ ticket.full_name }} ({{ ticket.email }})</p>
+        <p><b>Message:</b> {{ ticket.message }}</p>
+
+        <!-- ADMIN REPLY -->
+        {% if ticket.admin_reply %}
+            <div class="admin-reply">
+                <b>Admin Reply:</b>
+                <p>{{ ticket.admin_reply }}</p>
+            </div>
+        {% endif %}
+
+        <!-- REPLY FORM -->
+        {% if ticket.status != 'closed' %}
+            <form method="POST" action="/admin_reply_ticket/{{ ticket.id }}">
+                <textarea name="reply" placeholder="Write reply..." required></textarea>
+                <button type="submit" class="btn">Send Reply</button>
+            </form>
+
+            <a href="/admin_close_ticket/{{ ticket.id }}" class="btn danger">
+                Close Ticket
+            </a>
+        {% else %}
+            <div class="closed-box">This ticket is closed</div>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

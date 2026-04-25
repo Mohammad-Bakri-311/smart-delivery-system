@@ -1,0 +1,38 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>Manage Markets</h1>
+        <p>Add markets, manage their products, or delete them.</p>
+    </div>
+
+    <div class="page-actions">
+        <a class="pay-btn admin-small-action" href="/admin_add_market">Add New Market</a>
+        <a class="secondary-link-dark" href="/admin">Back Dashboard</a>
+    </div>
+
+    <div class="market-grid">
+        {% for market in markets %}
+        <div class="market-card">
+            <div class="market-image">
+                <img src="{{ url_for('static', filename='images/markets/' + market.name|replace(' ', '-') + '.jpg') }}"
+                     alt="{{ market.name }}"
+                     onerror="this.src='/static/images/markets/default.jpg'">
+            </div>
+
+            <div class="market-content">
+                <h3>{{ market.name }}</h3>
+                <p>{{ market.address }}</p>
+                <p>Hours: {{ market.open_time }} - {{ market.close_time }}</p>
+
+                <div class="admin-card-actions">
+                    <a class="small-btn" href="/admin_market_products/{{ market.id }}">Products</a>
+                    <a class="danger-btn" href="/admin_delete_market/{{ market.id }}">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-card large">
+        <h1>Checkout</h1>
+        <p>Select your delivery location from Google Maps suggestions.</p>
+
+        <form action="/checkout" method="POST" onsubmit="return validateCheckoutLocation()">
+            <label>Delivery Location</label>
+            <input type="text" id="delivery_search" name="delivery_address" placeholder="Search delivery location in Israel" required>
+
+            <div id="checkout_map" style="height: 350px; margin-top:20px;"></div>
+
+            <input type="hidden" name="delivery_x" id="delivery_x">
+            <input type="hidden" name="delivery_y" id="delivery_y">
+
+            <div class="payment-box">
+                <h2>Total: ₪{{ "%.2f"|format(total) }}</h2>
+                <p>After checkout you will continue to payment.</p>
+            </div>
+
+            <button type="submit">Continue to Payment</button>
+        </form>
+    </div>
+</div>
+
+<script>
+let checkoutMap;
+let deliveryMarker = null;
+
+function loadGoogleMaps() {
+    if (window.google && window.google.maps) {
+        initCheckoutMap();
+        return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places";
+    script.async = true;
+    script.defer = true;
+
+    script.onload = function () {
+        initCheckoutMap();
+    };
+
+    script.onerror = function () {
+        alert("Google Maps failed to load. Please refresh the page.");
+    };
+
+    document.head.appendChild(script);
+}
+
+function initCheckoutMap() {
+    const mapBox = document.getElementById("checkout_map");
+
+    if (!mapBox) {
+        return;
+    }
+
+    if (!window.google || !google.maps) {
+        setTimeout(initCheckoutMap, 500);
+        return;
+    }
+
+    const defaultLocation = { lat: 32.0853, lng: 34.7818 };
+
+    checkoutMap = new google.maps.Map(mapBox, {
+        zoom: 10,
+        center: defaultLocation
+    });
+
+    const deliveryInput = document.getElementById("delivery_search");
+
+    const autocomplete = new google.maps.places.Autocomplete(deliveryInput, {
+        componentRestrictions: { country: "il" }
+    });
+
+    autocomplete.addListener("place_changed", function () {
+        const place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+            alert("Please choose a valid delivery location from Google suggestions.");
+            return;
+        }
+
+        const loc = place.geometry.location;
+
+        if (deliveryMarker) {
+            deliveryMarker.setMap(null);
+        }
+
+        deliveryMarker = new google.maps.Marker({
+            position: loc,
+            map: checkoutMap,
+            label: "D"
+        });
+
+        checkoutMap.setCenter(loc);
+        checkoutMap.setZoom(15);
+
+        document.getElementById("delivery_x").value = loc.lat();
+        document.getElementById("delivery_y").value = loc.lng();
+    });
+}
+
+function validateCheckoutLocation() {
+    const x = document.getElementById("delivery_x").value;
+    const y = document.getElementById("delivery_y").value;
+
+    if (x === "" || y === "") {
+        alert("Please choose a delivery location from Google Maps suggestions before continuing.");
+        return false;
+    }
+
+    return true;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadGoogleMaps();
+});
+</script>
+{% endblock %}

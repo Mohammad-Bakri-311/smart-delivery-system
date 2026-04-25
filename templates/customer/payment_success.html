@@ -1,0 +1,32 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="success-page">
+    <div class="success-card">
+        <div class="success-animation">
+            <div class="success-circle">
+                <span>✓</span>
+            </div>
+        </div>
+
+        <h1>Payment Successful</h1>
+        <p>Your order #{{ order_id }} has been paid successfully.</p>
+
+        <div class="success-summary">
+            <div>
+                <span>Status</span>
+                <strong>Paid</strong>
+            </div>
+            <div>
+                <span>Delivery</span>
+                <strong>In progress</strong>
+            </div>
+        </div>
+
+        <div class="success-actions">
+            <a href="/customer" class="success-primary">Go Home</a>
+            <a href="/track_order" class="success-secondary">View My Orders</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

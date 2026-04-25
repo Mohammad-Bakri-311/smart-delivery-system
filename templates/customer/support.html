@@ -1,0 +1,63 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="hero">
+        <h1>Support</h1>
+        <p>Contact support and track your tickets.</p>
+    </div>
+
+    <!-- CREATE TICKET -->
+    <div class="ticket-card">
+        <h3>Create New Ticket</h3>
+
+        <form method="POST" action="/support">
+            <label>Order (optional)</label>
+            <select name="order_id">
+                <option value="">No order</option>
+                {% for order in orders %}
+                    <option value="{{ order.id }}">Order #{{ order.id }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Subject</label>
+            <input type="text" name="subject" required>
+
+            <label>Message</label>
+            <textarea name="message" required></textarea>
+
+            <button type="submit" class="btn">Send Ticket</button>
+        </form>
+    </div>
+
+    <!-- TICKETS -->
+    {% for ticket in tickets %}
+    <div class="ticket-card">
+
+        <div class="ticket-header">
+            <h3>{{ ticket.subject }}</h3>
+
+            {% if ticket.status == 'closed' %}
+                <span class="status closed">Closed</span>
+            {% else %}
+                <span class="status open">Open</span>
+            {% endif %}
+        </div>
+
+        <p>{{ ticket.message }}</p>
+
+        {% if ticket.admin_reply %}
+            <div class="reply-box">
+                <b>Support Reply:</b>
+                <p>{{ ticket.admin_reply }}</p>
+            </div>
+        {% else %}
+            <p class="waiting">Waiting for support reply...</p>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

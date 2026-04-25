@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else "Smart Delivery" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% if session.get("user_id") %}
+    {% include "shared/navbar.html" %}
+{% endif %}
+
+{% if session.get("success") %}
+    <div class="success-message">
+        {{ session.pop("success") }}
+    </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

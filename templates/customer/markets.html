@@ -1,0 +1,36 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="hero">
+        <h1>Markets</h1>
+        <p>Choose a market and order products.</p>
+    </div>
+
+    <div class="market-grid">
+        {% for market in markets %}
+        <a class="market-card" href="/market/{{ market.id }}">
+            <div class="market-image">
+                <img
+                    src="{{ url_for('static', filename='images/markets/' ~ market.name|replace(' ', '-') ~ '.jpg') }}"
+                    alt="{{ market.name }}"
+                    onerror="this.onerror=null; this.src='/static/images/markets/default.jpg';">
+            </div>
+
+            <div class="market-content">
+                <h3>{{ market.name }}</h3>
+                <p>{{ market.address }}</p>
+
+                {% if market.is_open_now %}
+                    <span class="status-pill open">Open now</span>
+                {% else %}
+                    <span class="status-pill closed">Closed now</span>
+                {% endif %}
+
+                <p class="hours">Hours: {{ market.open_time }} - {{ market.close_time }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

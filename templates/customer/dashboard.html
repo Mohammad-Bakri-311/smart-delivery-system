@@ -1,0 +1,56 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+    <section class="home-hero">
+        <div>
+            <span class="eyebrow">Fast delivery in Israel</span>
+            <h1>Order anything, track everything.</h1>
+            <p>Choose markets, add products to cart, pay online, and follow your delivery status from pickup to delivered.</p>
+
+            <div class="hero-actions">
+                <a class="pay-btn" href="/markets">Order from Market</a>
+                <a class="secondary-link" href="/create_order">Send Custom Package</a>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            <div class="preview-card">
+                <span>🚚</span>
+                <h3>Smart Driver Assignment</h3>
+                <p>Nearest available driver is selected automatically.</p>
+            </div>
+            <div class="preview-card">
+                <span>📍</span>
+                <h3>Google Maps Location</h3>
+                <p>Pick real locations without typing coordinates.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>What can you do?</h2>
+        <p>Everything a modern delivery system needs.</p>
+    </div>
+
+    <div class="cards">
+        <a class="card" href="/markets">
+            <span>🛒</span>
+            <h3>Order from Markets</h3>
+            <p>Browse stores, choose products, add to cart, checkout, and pay.</p>
+        </a>
+
+        <a class="card" href="/create_order">
+            <span>📦</span>
+            <h3>Custom Package</h3>
+            <p>Send documents, keys, or small boxes using pickup and delivery locations.</p>
+        </a>
+
+        <a class="card" href="/track_order">
+            <span>📊</span>
+            <h3>Live Order Status</h3>
+            <p>See driver name, payment status, ETA, pickup time, and delivery time.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-card large">
+        <h1>Send Custom Package</h1>
+        <p>Select pickup and delivery locations, then describe your package.</p>
+
+        <form action="/create_order" method="POST" onsubmit="return validateCustomDelivery()">
+            <label>Pickup Location</label>
+            <input type="text" id="pickup_search" name="pickup_address" placeholder="Search pickup location in Israel" required>
+
+            <label>Delivery Location</label>
+            <input type="text" id="delivery_search" name="delivery_address" placeholder="Search delivery location in Israel" required>
+
+            <div id="map" style="height: 400px; margin-top:20px;"></div>
+
+            <input type="hidden" name="pickup_x" id="pickup_x">
+            <input type="hidden" name="pickup_y" id="pickup_y">
+            <input type="hidden" name="delivery_x" id="delivery_x">
+            <input type="hidden" name="delivery_y" id="delivery_y">
+
+            <label>Package Description</label>
+            <textarea name="package_description" placeholder="Example: documents, keys, small box..." required></textarea>
+
+            <button type="submit">Create Delivery & Continue to Payment</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&callback=initMap" async defer></script>
+<script>
+let map;
+let pickupMarker = null;
+let deliveryMarker = null;
+
+function initMap() {
+    const defaultLocation = { lat: 32.0853, lng: 34.7818 };
+
+    map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 10,
+        center: defaultLocation
+    });
+
+    setupAutocomplete("pickup_search", "pickup");
+    setupAutocomplete("delivery_search", "delivery");
+}
+
+function setupAutocomplete(inputId, type) {
+    const input = document.getElementById(inputId);
+
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+        componentRestrictions: { country: "il" }
+    });
+
+    autocomplete.addListener("place_changed", function() {
+        const place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+            alert("Please choose a valid location from Google suggestions.");
+            return;
+        }
+
+        const loc = place.geometry.location;
+
+        if (type === "pickup") {
+            if (pickupMarker) pickupMarker.setMap(null);
+
+            pickupMarker = new google.maps.Marker({
+                position: loc,
+                map: map,
+                label: "P"
+            });
+
+            document.getElementById("pickup_x").value = loc.lat();
+            document.getElementById("pickup_y").value = loc.lng();
+        } else {
+            if (deliveryMarker) deliveryMarker.setMap(null);
+
+            deliveryMarker = new google.maps.Marker({
+                position: loc,
+                map: map,
+                label: "D"
+            });
+
+            document.getElementById("delivery_x").value = loc.lat();
+            document.getElementById("delivery_y").value = loc.lng();
+        }
+
+        map.setCenter(loc);
+        map.setZoom(15);
+    });
+}
+
+function validateCustomDelivery() {
+    const pickupX = document.getElementById("pickup_x").value;
+    const pickupY = document.getElementById("pickup_y").value;
+    const deliveryX = document.getElementById("delivery_x").value;
+    const deliveryY = document.getElementById("delivery_y").value;
+
+    if (!pickupX || !pickupY || !deliveryX || !deliveryY) {
+        alert("Please select both pickup and delivery locations from Google suggestions.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+{% endblock %}

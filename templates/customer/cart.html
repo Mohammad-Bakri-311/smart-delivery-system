@@ -1,0 +1,68 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+
+    <div class="hero">
+        <h1>Your Cart</h1>
+        <p>Review your items before checkout</p>
+    </div>
+
+    <div class="page-actions">
+        <a class="secondary-link-dark" href="/customer">🏠 Home</a>
+        <a class="secondary-link-dark" href="/markets">⬅ Continue Shopping</a>
+    </div>
+
+    {% if cart_items %}
+
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+
+            {% for item in cart_items %}
+<tr>
+    <td>
+        <div class="cart-product">
+            <img src="{{ item.image_url }}">
+            <span>{{ item.name }}</span>
+        </div>
+    </td>
+
+    <td>₪{{ "%.2f"|format(item.price) }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>₪{{ "%.2f"|format(item.price * item.quantity) }}</td>
+
+    <td>
+        <a href="/remove_from_cart/{{ item.cart_id }}" class="delete-btn">
+            Delete
+        </a>
+    </td>
+</tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="checkout-box">
+        <h2>Total: ₪{{ "%.2f"|format(total) }}</h2>
+        <a class="pay-btn" href="/checkout">Proceed to Checkout</a>
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Start adding items from markets.</p>
+        <a class="pay-btn" href="/markets">Go to Markets</a>
+    </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}
