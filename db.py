@@ -1,11 +1,16 @@
-# import mysql connector to connect Python with MySQL database
+import os
 import mysql.connector
+from urllib.parse import urlparse
 
-# this function creates connection with smart_delivery database
 def get_connection():
+    url = os.getenv("DATABASE_URL")
+
+    parsed = urlparse(url)
+
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="1234",
-        database="smart_delivery"
+        host=parsed.hostname,
+        user=parsed.username,
+        password=parsed.password,
+        database=parsed.path.lstrip('/'),
+        port=parsed.port
     )
