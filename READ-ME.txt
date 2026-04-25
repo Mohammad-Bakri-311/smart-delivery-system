@@ -1,0 +1,172 @@
+# Smart Delivery System 🚚
+
+A full-stack smart delivery platform inspired by real-world systems like Uber and Glovo.
+The system supports customers, drivers, and admins, with Google Maps integration, order tracking, and automatic nearest-driver assignment using a distance-based algorithm.
+
+---
+
+## 🚀 Features
+
+* Role-based system: Customer, Driver, Admin
+* Customer registration and login
+* Create custom delivery orders
+* Market and cart ordering system
+* Google Maps integration for location selection
+* Google Places API for address search
+* Automatic nearest-driver assignment
+* Order status tracking:
+
+  * Created
+  * Assigned
+  * Picked Up
+  * Delivered
+* Payment simulation system
+* Notifications system
+* Support ticket system
+* Admin dashboard for managing:
+
+  * Orders
+  * Drivers
+  * Customers
+  * Markets
+  * Products
+  * Support tickets
+
+---
+
+## 🧠 Core Logic
+
+* Implemented a distance-based algorithm to assign the nearest available driver
+* Automatically updates driver status between available and busy
+* Tracks the full order lifecycle from creation to delivery
+* Supports both custom delivery and market orders
+
+---
+
+## 🏗 System Design
+
+* Backend built with Flask
+* Frontend built with HTML, CSS, JavaScript, and Jinja2 templates
+* MySQL relational database
+* Organized project structure with templates, static files, database scripts, and screenshots
+* Includes multiple interconnected tables (users, orders, drivers, products, tracking, etc.)
+
+---
+
+## 🛠 Technologies Used
+
+* Python
+* Flask
+* MySQL
+* HTML
+* CSS
+* JavaScript
+* Jinja2
+* Google Maps API
+* Google Places API
+
+---
+
+## 📸 Screenshots
+
+Project screenshots are available in:
+
+```text
+static/images/screenshots/
+```
+
+---
+
+## 🗄 Database Setup
+
+1. Open phpMyAdmin
+2. Create a new database:
+
+```sql
+smart_delivery
+```
+
+3. Import the SQL file from:
+
+```text
+database/smart_delivery.sql
+```
+
+4. Make sure database connection in `db.py` matches your local setup
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Mohammad-Bakri-311/smart-delivery-system.git
+cd smart-delivery-system
+```
+
+---
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 3. Create `.env` file
+
+```env
+GOOGLE_API_KEY=your_google_api_key_here
+SECRET_KEY=your_secret_key_here
+```
+
+---
+
+### 4. Run the application
+
+```bash
+python app.py
+```
+
+---
+
+### 5. Open locally
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 🔐 Security Notes
+
+* `.env` file is excluded from the repository for security reasons
+* API keys are loaded using environment variables
+* Google API key should be restricted using HTTP referrers
+* Passwords are stored as plain text for demonstration purposes only
+
+---
+
+## 🚀 Future Improvements
+
+* Deploy the project online
+* Add real payment gateway integration
+* Add password hashing
+* Real-time tracking
+* Route optimization using Google Directions API
+* REST API support
+* Mobile application version
+
+---
+
+## 👨‍💻 Author
+
+Mohammad Bakri
+
+---
+
+## 📌 Project Status
+
+🚧 Actively under development with ongoing improvements and new features
