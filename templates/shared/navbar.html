@@ -2,7 +2,10 @@
     <div class="logo">Smart Delivery</div>
 
     <div class="nav-links">
-        {% if session.get("role") == "customer" %}
+        {% if session.get("role") == "admin" %}
+            <a href="/admin">Dashboard</a>
+
+        {% elif session.get("role") == "customer" %}
             <a href="/customer">Home</a>
             <a href="/markets">Markets</a>
             <a href="/cart">Cart</a>
@@ -11,13 +14,12 @@
             <a href="/notifications">Notifications</a>
 
         {% elif session.get("role") == "driver" %}
-            <a href="/driver">Home</a>
-            <a href="/notifications">Notifications</a>
-
-        {% elif session.get("role") == "admin" %}
-            <a href="/admin">Home</a>
+            <a href="/driver">Dashboard</a>
+            <a href="/driver_notifications">Notifications</a>
         {% endif %}
 
-        <a class="logout" href="/logout">Logout</a>
+        {% if session.get("user_id") %}
+            <a class="logout" href="/logout">Logout</a>
+        {% endif %}
     </div>
 </div>

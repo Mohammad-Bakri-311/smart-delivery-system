@@ -761,10 +761,18 @@ def driver_dashboard():
     if "user_id" not in session or session["role"] != "driver":
         return redirect("/")
 
+    update_expired_orders()
+
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM drivers WHERE user_id=%s", (session["user_id"],))
+    cursor.execute(
+        """
+        SELECT * FROM drivers
+        WHERE user_id=%s
+        """,
+        (session["user_id"],)
+    )
     driver = cursor.fetchone()
 
     if not driver:
@@ -774,7 +782,10 @@ def driver_dashboard():
 
     cursor.execute(
         """
-        SELECT orders.*, users.full_name AS customer_name
+        SELECT 
+            orders.*,
+            users.full_name AS customer_name,
+            users.email AS customer_email
         FROM orders
         JOIN users ON orders.customer_id = users.id
         WHERE orders.driver_id=%s
@@ -782,13 +793,221 @@ def driver_dashboard():
         """,
         (driver["id"],)
     )
-
     orders = cursor.fetchall()
+
+    cursor.execute(
+        """
+        SELECT COUNT(*) AS total
+        FROM orders
+        WHERE driver_id=%s
+        """,
+        (driver["id"],)
+    )
+    total_orders = cursor.fetchone()["total"]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*) AS total
+        FROM orders
+        WHERE driver_id=%s AND status='delivered'
+        """,
+        (driver["id"],)
+    )
+    delivered_orders = cursor.fetchone()["total"]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*) AS total
+        FROM orders
+        WHERE driver_id=%s AND status IN ('assigned','picked_up')
+        """,
+        (driver["id"],)
+    )
+    active_orders = cursor.fetchone()["total"]
 
     cursor.close()
     conn.close()
 
-    return render_template("driver/dashboard.html", orders=orders, driver=driver)
+    return render_template(
+        "driver/dashboard.html",
+        driver=driver,
+        orders=orders,
+        total_orders=total_orders,
+        delivered_orders=delivered_orders,
+        active_orders=active_orders
+    )
+
+
+@app.route("/driver_update_order/<int:order_id>/<status>")
+def driver_update_order(order_id, status):
+    if "user_id" not in session or session["role"] != "driver":
+        return redirect("/")
+
+    allowed = ["picked_up", "delivered"]
+
+    if status not in allowed:
+        return redirect("/driver")
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT * FROM drivers
+        WHERE user_id=%s
+        """,
+        (session["user_id"],)
+    )
+    driver = cursor.fetchone()
+
+    if not driver:
+        cursor.close()
+        conn.close()
+        return redirect("/driver")
+
+    cursor.execute(
+        """
+        SELECT * FROM orders
+        WHERE id=%s AND driver_id=%s
+        """,
+        (order_id, driver["id"])
+    )
+    order = cursor.fetchone()
+
+    if not order:
+        cursor.close()
+        conn.close()
+        return redirect("/driver")
+
+    if status == "picked_up":
+        cursor.execute(
+            """
+            UPDATE orders
+            SET status='picked_up',
+                picked_up_at=NOW(),
+                estimated_minutes=20
+            WHERE id=%s AND driver_id=%s
+            """,
+            (order_id, driver["id"])
+        )
+
+        cursor.execute(
+            """
+            INSERT INTO order_tracking (order_id, status, note)
+            VALUES (%s, %s, %s)
+            """,
+            (order_id, "picked_up", "Driver picked up the order")
+        )
+
+        cursor.execute(
+            """
+            INSERT INTO notifications (user_id, title, message, is_read)
+            VALUES (%s, %s, %s, 0)
+            """,
+            (
+                order["customer_id"],
+                "Order Picked Up",
+                "Your order has been picked up by the driver."
+            )
+        )
+
+    elif status == "delivered":
+        cursor.execute(
+            """
+            UPDATE orders
+            SET status='delivered',
+                delivered_at=NOW(),
+                estimated_minutes=0
+            WHERE id=%s AND driver_id=%s
+            """,
+            (order_id, driver["id"])
+        )
+
+        cursor.execute(
+            """
+            UPDATE drivers
+            SET status='available'
+            WHERE id=%s
+            """,
+            (driver["id"],)
+        )
+
+        cursor.execute(
+            """
+            INSERT INTO order_tracking (order_id, status, note)
+            VALUES (%s, %s, %s)
+            """,
+            (order_id, "delivered", "Driver delivered the order")
+        )
+
+        cursor.execute(
+            """
+            INSERT INTO notifications (user_id, title, message, is_read)
+            VALUES (%s, %s, %s, 0)
+            """,
+            (
+                order["customer_id"],
+                "Order Delivered",
+                "Your order has been delivered successfully."
+            )
+        )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect("/driver")
+
+
+@app.route("/driver_set_status/<status>")
+def driver_set_status(status):
+    if "user_id" not in session or session["role"] != "driver":
+        return redirect("/")
+
+    if status not in ["available", "busy"]:
+        return redirect("/driver")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE drivers
+        SET status=%s
+        WHERE user_id=%s
+        """,
+        (status, session["user_id"])
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect("/driver")
+
+
+@app.route("/driver_notifications")
+def driver_notifications():
+    if "user_id" not in session or session["role"] != "driver":
+        return redirect("/")
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT * FROM notifications
+        WHERE user_id=%s
+        ORDER BY created_at DESC
+        """,
+        (session["user_id"],)
+    )
+    notifications = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("driver/notifications.html", notifications=notifications)
 
 
 @app.route("/update_order_status/<int:order_id>/<status>")

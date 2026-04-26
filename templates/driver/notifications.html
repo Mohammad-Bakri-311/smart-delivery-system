@@ -1,0 +1,34 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+<div class="page">
+
+    <div class="hero">
+        <h1>Driver Notifications</h1>
+        <p>View your delivery updates and system messages.</p>
+    </div>
+
+    <div class="page-actions">
+        <a class="secondary-link-dark" href="/driver">Back Dashboard</a>
+    </div>
+
+    {% if notifications %}
+    <div class="notification-list">
+        {% for notification in notifications %}
+        <div class="notification-card">
+            <h3>{{ notification.title }}</h3>
+            <p>{{ notification.message }}</p>
+            <small>{{ notification.created_at }}</small>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🔔</div>
+        <h2>No notifications</h2>
+        <p>You do not have notifications yet.</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1257,3 +1257,16 @@ input, select {
 .delete-btn:hover {
     background: #dc2626;
 }
+.driver-status-box {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-row-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
