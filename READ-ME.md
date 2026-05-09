@@ -5,13 +5,13 @@ The system allows customers to create delivery orders, automatically assigns the
 
 ---
 
-## 🌐 Live Demo
+##  Live Demo
 
 🔗 https://smart-delivery-system.onrender.com
 
 ---
 
-## 🧪 Demo Account (Customer)
+##  Demo Account (Customer)
 
 Use the following account to test the system:
 
@@ -23,7 +23,7 @@ Role: Customer
 
 ---
 
-## 🔐 Admin Access
+##  Admin Access
 
 Admin features are **not publicly shared for security reasons**.
 
@@ -32,7 +32,7 @@ Admin features are **not publicly shared for security reasons**.
 
 ---
 
-## 🚀 Features
+##  Features
 
 * User authentication (login & register)
 * Role-based system (Customer, Driver, Admin)
@@ -51,7 +51,7 @@ Admin features are **not publicly shared for security reasons**.
 
 ---
 
-## 🧠 Core Logic
+##  Core Logic
 
 * Distance-based algorithm to assign the nearest available driver
 * Dynamic driver availability management
@@ -65,7 +65,7 @@ Admin features are **not publicly shared for security reasons**.
 
 ---
 
-## 🏗 Technologies Used
+##  Technologies Used
 
 * Python (Flask)
 * MySQL (Railway database)
@@ -78,7 +78,7 @@ Admin features are **not publicly shared for security reasons**.
 
 ---
 
-## 🗄 Database
+##  Database
 
 The system uses a MySQL relational database with multiple tables such as:
 
@@ -92,7 +92,7 @@ The system uses a MySQL relational database with multiple tables such as:
 * notifications
 * support tickets
 
-📂 SQL file is included:
+ SQL file is included:
 
 ```text
 database/smart_delivery.sql
@@ -100,7 +100,7 @@ database/smart_delivery.sql
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 All screenshots are available in:
 
@@ -119,7 +119,7 @@ Includes:
 
 ---
 
-## ⚙️ Run Locally
+##  Run Locally
 
 1. Clone the project:
 
@@ -156,7 +156,7 @@ http://localhost:5000
 
 ---
 
-## 🔐 Security Notes
+##  Security Notes
 
 * `.env` file is not included in the repository
 * API keys are stored using environment variables
@@ -166,7 +166,7 @@ http://localhost:5000
 
 ---
 
-## 🚀 Future Improvements
+##  Future Improvements
 
 * Add password hashing (bcrypt)
 * Add real payment integration
@@ -177,12 +177,12 @@ http://localhost:5000
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 Mohammad Bakri
 
 ---
 
-## 📌 Project Status
+##  Project Status
 
-🚧 Actively under development
+ Actively under development
